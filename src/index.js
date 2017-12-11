@@ -91,7 +91,7 @@ chrome.runtime.Module = class Module extends EventEmitter {
     if(chrome.runtime.background) {
       chrome.extension.onMessage.addListener((message, sender) => {
         const { action, data, from, name } = message;
-        if(!this.pattern.test(location.href)) return;
+        if(!this.pattern.test(sender.tab.url)) return;
         if(this.constructor.name !== name) return;
         this.emit('onMessage', message, from);
       });
