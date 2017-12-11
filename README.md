@@ -10,7 +10,7 @@ Chrome Extension Cross-Message :
 
 ### constructor(url_pattern: String, options: Object)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   constructor() {
     // options = { foreground: Boolean }
     super("https://www.google.*/*", {
@@ -29,7 +29,7 @@ class ExampleModule extends chrome.runtime.RemoteModule {
 
 ### onCreate(href: String)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   /* ... */
   onCreate(href) {
     if(chrome.runtime.background) console.info("Background Start !");
@@ -42,7 +42,7 @@ class ExampleModule extends chrome.runtime.RemoteModule {
 
 ### onMessage(action: String, data: Object, from: String)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   /* ... */
   onMessage(action, data, from) {
     // from = "remote", "background", "sideground", "foreground"
@@ -54,7 +54,7 @@ class ExampleModule extends chrome.runtime.RemoteModule {
 
 ### onForeground(href: String)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   /* ... */
   onForeground(href) {
     // Only Foreground Workflow
@@ -65,7 +65,7 @@ class ExampleModule extends chrome.runtime.RemoteModule {
 
 ### onSideground(href: String)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   /* ... */
   onSideground(href) {
     // Only Sideground Workflow
@@ -76,7 +76,7 @@ class ExampleModule extends chrome.runtime.RemoteModule {
 
 ### onBackground(href: String)
 ```javascript
-class ExampleModule extends chrome.runtime.RemoteModule {
+class ExampleModule extends chrome.runtime.Module {
   /* ... */
   onBackground(href) {
     // Only Background Workflow
