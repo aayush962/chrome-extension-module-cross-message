@@ -53,7 +53,7 @@ chrome.runtime.Module = class Module extends EventEmitter {
       chrome.tabs.onUpdated.addListener((id, info, tab) => {
         if(!this.pattern.test(tab.url) || !_.eq(info.status, 'complete')) return;
         this.emit('onCreate', tab.url);
-        this.cast('onCreate', tab.url, id);  
+        this.cast('onCreate', tab.url, undefined, id);
       })
     }
   }
@@ -98,21 +98,21 @@ chrome.runtime.Module = class Module extends EventEmitter {
     }
   }
 
-  cast(action, data, sender) {
+  cast(action, data, from, tab) {
     const detail = { action, data, name: this.constructor.name };
     switch(true) {
       case chrome.runtime.foreground:
-        _.set(detail, 'from', 'foreground');
-        document.dispatchEvent(new CustomEvent('sideground.onMessage', { detail }));
+        _.set(detail, 'from', from || 'foreground');
+        if(_.eq(detail.from, 'foreground')) document.dispatchEvent(new CustomEvent('sideground.onMessage', { detail }));
       break;
       case chrome.runtime.sideground:
-        _.set(detail, 'from', sender || 'sideground');
+        _.set(detail, 'from', from || 'sideground');
         if(_.eq(detail.from, 'sideground') || _.eq(detail.from, 'foreground')) chrome.extension.sendMessage(detail);
         if(_.eq(detail.from, 'sideground') || _.eq(detail.from, 'background')) document.dispatchEvent(new CustomEvent('foreground.onMessage', { detail }));
       break;
       case chrome.runtime.background:
-        _.set(detail, 'from', 'background');
-        chrome.tabs.sendMessage(_.get(sender, 'tab.id', sender), detail);
+        _.set(detail, 'from', from || 'background');
+        if(_.eq(detail.from, 'background')) chrome.tabs.sendMessage(_.get(tab, 'tab.id', tab), detail);
       break;
     }
   }
